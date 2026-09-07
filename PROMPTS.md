@@ -291,3 +291,21 @@ when i press = after any expression, it first appends itself into the text box, 
 ```
 yes
 ```
+
+### Message 24
+
+```
+what does the xy button do?
+```
+
+### Message 25
+
+```
+so whats currently happening is when i type 2, then xy, nothing shows up on the input field. also, the text on xy button should be changed to ^. its better understandable. when the user types ^ button, input should show 2^, then when i type 3, input should show the superscripted text directly
+```
+
+### Message 26
+
+```
+now, another case is when i go: 2+3*8=, i get the result in my input field, however, then when i type any operation (which should be allowed, the input removes the prev result, and only takes the operation as the input, basically result should be preserved for immediate followup operations. this is a basic requirement of any calculator app
+```

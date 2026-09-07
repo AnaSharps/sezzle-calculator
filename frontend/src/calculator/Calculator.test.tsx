@@ -132,10 +132,16 @@ describe('Calculator', () => {
     const user = userEvent.setup();
     render(<App />);
 
+    expect(screen.getByRole('button', { name: 'exponent' })).toHaveTextContent('^');
+
     await user.click(screen.getByRole('button', { name: '2' }));
     await user.click(screen.getByRole('button', { name: 'exponent' }));
+
+    expect(screen.getByTestId('display-value')).toHaveTextContent('2^');
+
     await user.click(screen.getByRole('button', { name: '3' }));
 
+    expect(screen.getByTestId('display-value')).not.toHaveTextContent('^');
     const sup = screen.getByTestId('display-value').querySelector('sup');
     expect(sup).toHaveTextContent('3');
 
@@ -200,6 +206,34 @@ describe('Calculator', () => {
 
     await user.click(screen.getByRole('button', { name: '9' }));
     expect(screen.getByTestId('display-value')).toHaveTextContent('9');
+  });
+
+  it('continues from the previous result when an operator is pressed right after it', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, { result: 26 }));
+    vi.stubGlobal('fetch', fetchMock);
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: '2' }));
+    await user.click(screen.getByRole('button', { name: 'add' }));
+    await user.click(screen.getByRole('button', { name: '3' }));
+    await user.click(screen.getByRole('button', { name: 'multiply' }));
+    await user.click(screen.getByRole('button', { name: '8' }));
+    await user.click(screen.getByRole('button', { name: 'equals' }));
+    expect(await screen.findByTestId('display-value')).toHaveTextContent('26');
+
+    await user.click(screen.getByRole('button', { name: 'add' }));
+    expect(screen.getByTestId('display-value')).toHaveTextContent('26+');
+
+    await user.click(screen.getByRole('button', { name: '4' }));
+    expect(screen.getByTestId('display-value')).toHaveTextContent('26+4');
+
+    fetchMock.mockResolvedValueOnce(jsonResponse(200, { result: 30 }));
+    await user.click(screen.getByRole('button', { name: 'equals' }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toEqual({ expression: '26+4' });
+    expect(await screen.findByTestId('display-value')).toHaveTextContent('30');
   });
 
   it('clears back to 0 when delete is pressed right after a result', async () => {

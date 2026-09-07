@@ -1,10 +1,22 @@
 import { useCallback, useState } from 'react';
 import { calculate } from '../api';
-import { canAddDecimalPoint, toCanonicalExpression } from './tokens';
+import { canAddDecimalPoint, formatResult, toCanonicalExpression } from './tokens';
 
 export interface CalculatorError {
   message: string;
   kind: 'validation' | 'network';
+}
+
+// Operators that continue naturally from a result just shown, the way
+// every physical calculator behaves: 26, "=", "+" means "26 plus
+// whatever comes next", not "discard 26 and start a new expression with
+// a leading +". sqrt and "(" are not included: they are prefix/grouping
+// tokens that don't attach to a preceding value, so they start fresh
+// like a digit would.
+const CHAINABLE_OPERATORS = new Set(['+', '-', '*', '/', '^', '%']);
+
+function numberToTokens(value: number): string[] {
+  return formatResult(value).split('');
 }
 
 export function useCalculator() {
@@ -14,25 +26,33 @@ export function useCalculator() {
   const [isLoading, setIsLoading] = useState(false);
   const [justEvaluated, setJustEvaluated] = useState(false);
 
-  // Any button press clears a previous error. Pressing anything right
-  // after a result was shown starts a fresh expression rather than
-  // appending to the number that was just displayed.
+  // Any button press clears a previous error. Pressing a chainable
+  // operator right after a result was shown continues from that result
+  // (the usual calculator behaviour); any other press discards the
+  // result and starts a fresh expression.
   const pressToken = useCallback(
     (token: string) => {
       setError(null);
+
       if (justEvaluated) {
-        setResult(null);
         setJustEvaluated(false);
-      }
-      setTokens((current) => {
-        const base = justEvaluated ? [] : current;
-        if (token === '.' && !canAddDecimalPoint(base)) {
-          return base;
+        if (result !== null && CHAINABLE_OPERATORS.has(token)) {
+          setTokens([...numberToTokens(result), token]);
+        } else {
+          setTokens([token]);
         }
-        return [...base, token];
+        setResult(null);
+        return;
+      }
+
+      setTokens((current) => {
+        if (token === '.' && !canAddDecimalPoint(current)) {
+          return current;
+        }
+        return [...current, token];
       });
     },
-    [justEvaluated],
+    [justEvaluated, result],
   );
 
   const clear = useCallback(() => {

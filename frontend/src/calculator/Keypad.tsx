@@ -18,16 +18,7 @@ const KEYS: KeyDef[] = [
   { label: ')', keyLabel: ')', token: ')', variant: 'modifier' },
 
   { label: '√', keyLabel: 'square root', token: 'sqrt', variant: 'operator' },
-  {
-    label: (
-      <>
-        x<sup>y</sup>
-      </>
-    ),
-    keyLabel: 'exponent',
-    token: '^',
-    variant: 'operator',
-  },
+  { label: '^', keyLabel: 'exponent', token: '^', variant: 'operator' },
   { label: '%', keyLabel: 'percent', token: '%', variant: 'operator' },
   { label: '÷', keyLabel: 'divide', token: '/', variant: 'operator' },
 

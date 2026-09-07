@@ -59,7 +59,7 @@ cd frontend && npm run coverage
 
 Committed summaries live at `backend/coverage.txt` (81.3% statements,
 100% on the parser's core `Evaluate` path) and
-`frontend/coverage-summary.txt` (100% statements/lines/functions, 98.63%
+`frontend/coverage-summary.txt` (100% statements/lines/functions, 98.73%
 branches). Both files explain the specific lines that remain uncovered
 and why. The raw profile (`backend/coverage.out`) and the full HTML/JSON
 report (`frontend/coverage/`) are regenerated locally and gitignored.
@@ -224,9 +224,12 @@ This grammar produces precedence and associativity that were verified with
   `POST /api/calculate`. This is never generated from the display text.
 - `buildDisplaySegments` (same file) walks the same token array to build
   what the user sees: it maps `*`, `/`, `sqrt`, and `-` through a single
-  lookup table to `×`, `÷`, `√`, and `−`, and marks digits following a
-  `^` token as superscript so `2`, `^`, `3` renders as `2³` while the
-  canonical string stays `2^3`.
+  lookup table to `×`, `÷`, `√`, and `−`. Pressing `^` shows a literal
+  `^` immediately, so the button press is never silently invisible; once
+  a digit follows, that `^` is replaced by rendering the digit (and any
+  further digits in that number) as a superscript, so `2`, `^`, `3`
+  renders as `2^` and then `2³`, while the canonical string sent to the
+  backend is `2^3` throughout.
 - Two representations exist because the display needs to look like a
   calculator (operator glyphs, a raised exponent) while the backend
   grammar needs an unambiguous plain-text string. Deriving both from the
@@ -234,6 +237,22 @@ This grammar produces precedence and associativity that were verified with
   request, means there is exactly one source of truth for what the user
   has typed, and the display can never drift out of sync with what gets
   sent.
+
+### Continuing a calculation from a result
+
+- After equals, the display shows the numeric result and the token
+  sequence used to compute it is done with. Pressing a digit, `sqrt`, or
+  `(` next discards that result and starts a brand new expression, since
+  those tokens don't attach to a preceding value.
+- Pressing a binary or postfix operator (`+ - * / ^ %`) instead
+  continues from the result, the way every physical calculator behaves:
+  `2+3*8`, `=` shows `26`; pressing `+` then seeds the next expression
+  with the result's digits followed by `+`, so the display reads `26+`,
+  and finishing with `4`, `=` sends `26+4` to the backend. This is
+  implemented in `useCalculator.ts` by converting the result back into
+  the same one-character-per-digit tokens a user would have typed
+  (`formatResult(value).split('')`), so it behaves identically to manual
+  entry for validation, superscript rendering, and everything else.
 
 ### Why the parser is a separate package from the HTTP layer
 

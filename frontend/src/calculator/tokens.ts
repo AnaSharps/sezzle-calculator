@@ -26,21 +26,35 @@ export interface DisplaySegment {
 
 // Walks the token sequence and groups it into display segments, marking
 // the digits and decimal points that immediately follow a "^" token as
-// superscript, so 2, ^, 3 renders as 2 then a superscript 3.
+// superscript, so 2, ^, 3 renders as 2 then a superscript 3. The "^"
+// itself is shown as a literal character (2^) until the first digit of
+// the exponent arrives, at which point it is replaced by the superscript
+// rendering, so pressing the exponent key always gives immediate visual
+// feedback instead of appearing to do nothing.
 export function buildDisplaySegments(tokens: string[]): DisplaySegment[] {
   const segments: DisplaySegment[] = [];
   let superscript = false;
+  let pendingCaretIndex: number | null = null;
 
   for (const token of tokens) {
     if (token === '^') {
       superscript = true;
+      segments.push({ text: '^', superscript: false });
+      pendingCaretIndex = segments.length - 1;
       continue;
     }
     if (!isNumberPart(token)) {
       superscript = false;
+      pendingCaretIndex = null;
     }
 
     const text = displayFor(token);
+
+    if (superscript && pendingCaretIndex !== null) {
+      segments.splice(pendingCaretIndex, 1);
+      pendingCaretIndex = null;
+    }
+
     const last = segments[segments.length - 1];
     if (last && last.superscript === superscript) {
       last.text += text;

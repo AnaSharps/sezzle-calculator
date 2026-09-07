@@ -11,29 +11,29 @@ Generated with: npm run coverage (vitest run --coverage)
 
 
  Test Files  2 passed (2)
-      Tests  19 passed (19)
-   Start at  18:45:23
-   Duration  1.23s (tests 60%, environment 28%, setup 5%, transform 3%, worker 2%, import 1%)
+      Tests  20 passed (20)
+   Start at  18:58:37
+   Duration  1.39s (tests 65%, environment 25%, setup 5%, transform 3%, worker 2%, import 1%)
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
 File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 -------------------|---------|----------|---------|---------|-------------------
-All files          |     100 |    98.63 |     100 |     100 |                   
- src/calculator    |     100 |    98.38 |     100 |     100 |                   
-  Keypad.tsx       |     100 |       90 |     100 |     100 | 70                
+All files          |     100 |    98.73 |     100 |     100 |                   
+ src/calculator    |     100 |    98.52 |     100 |     100 |                   
+  Keypad.tsx       |     100 |       90 |     100 |     100 | 61                
 -------------------|---------|----------|---------|---------|-------------------
 
 =============================== Coverage summary ===============================
-Statements   : 100% ( 121/121 )
-Branches     : 98.63% ( 72/73 )
-Functions    : 100% ( 26/26 )
-Lines        : 100% ( 118/118 )
+Statements   : 100% ( 133/133 )
+Branches     : 98.73% ( 78/79 )
+Functions    : 100% ( 27/27 )
+Lines        : 100% ( 130/130 )
 ================================================================================
 
 Notes:
 - Statements, lines, and functions are all at 100%.
-- The one remaining uncovered branch is Keypad.tsx:70, the
+- The one remaining uncovered branch is Keypad.tsx, the
   "key.token !== undefined" check in handlePress's if/else-if chain.
   Every entry in the KEYS array always has either an action or a token,
   so the implicit "neither" fallthrough this guards against cannot
