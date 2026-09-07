@@ -6,48 +6,19 @@ verbatim message log of how the implementation proceeded from there.
 
 ## Setup Instructions
 
-Prerequisites:
+Clone the repository, then pick one of the three ways to run it below.
+Everything works with defaults out of the box: the backend expects
+`PORT=8080` and `ALLOWED_ORIGIN=http://localhost:5173`, the frontend
+expects `VITE_API_URL=http://localhost:8080`. Override either only by
+copying the matching `.env.example` to `.env` in `backend/` or
+`frontend/`.
 
-- Go 1.27 or later.
-- Node.js 20 or later (tested with Node 26) and npm.
-
-Clone the repository, then install each side:
-
-```
-cd backend
-go mod download   # no third-party dependencies, but this is harmless
-
-cd ../frontend
-npm install
-```
-
-Both sides run with no further configuration: the backend defaults to
-`PORT=8080` and `ALLOWED_ORIGIN=http://localhost:5173`, and the frontend
-defaults to `VITE_API_URL=http://localhost:8080`. Copy `backend/.env.example`
-to `backend/.env` and `frontend/.env.example` to `frontend/.env` only if you
-need to override those defaults.
+- **Docker**: just Docker.
+- **Local**: Go 1.27+, Node.js 20+, and npm.
 
 ## Running Frontend and Backend
 
-Start the backend first, from `backend/`:
-
-```
-go run .
-```
-
-This logs `listening on :8080 (allowed origin: http://localhost:5173)` and
-serves `POST /api/calculate` and `GET /health`.
-
-In a second terminal, start the frontend, from `frontend/`:
-
-```
-npm run dev
-```
-
-Vite serves the calculator at `http://localhost:5173`. Open it in a browser;
-it talks to the backend at `http://localhost:8080` by default.
-
-### Running with Docker
+### 1. Docker Compose (fastest)
 
 From the repository root, with Docker running:
 
@@ -55,13 +26,10 @@ From the repository root, with Docker running:
 docker compose up --build
 ```
 
-This builds and starts both services: the backend on `http://localhost:8080`
-and the frontend on `http://localhost:5173`, wired to talk to each other
-with the same default ports as running them locally. Stop them with
-`docker compose down`.
+Backend on `http://localhost:8080`, frontend on `http://localhost:5173`.
+Stop with `docker compose down`.
 
-Each side also has its own `Dockerfile` if you want to build or run it in
-isolation, for example:
+### 2. Docker, one side at a time
 
 ```
 docker build -t sezzle-calculator-backend ./backend
@@ -72,31 +40,31 @@ docker build -t sezzle-calculator-frontend \
 docker run -p 5173:80 sezzle-calculator-frontend
 ```
 
-`VITE_API_URL` is a build argument, not a runtime environment variable,
-because Vite bakes it into the static JavaScript bundle at build time; the
-built frontend runs entirely in the browser, so the URL it points to has to
-be reachable from there, not from inside the Docker network.
+`VITE_API_URL` is a build argument, not a runtime one: Vite bakes it into
+the bundle at build time, and the built frontend runs in the browser, so
+it needs a URL the browser can reach, not one that only resolves inside
+the Docker network.
 
-To run the test suites:
-
-```
-cd backend && go test ./...
-cd frontend && npm test
-```
-
-To regenerate the coverage reports:
+### 3. Locally, without Docker
 
 ```
-cd backend && go test ./... -coverprofile=coverage.out && go tool cover -func=coverage.out
-cd frontend && npm run coverage
+cd backend && go run .
 ```
 
-Committed summaries live at `backend/coverage.txt` (81.3% statements,
-100% on the parser's core `Evaluate` path) and
-`frontend/coverage-summary.txt` (100% statements/lines/functions, 98.73%
-branches). Both files explain the specific lines that remain uncovered
-and why. The raw profile (`backend/coverage.out`) and the full HTML/JSON
-report (`frontend/coverage/`) are regenerated locally and gitignored.
+In a second terminal:
+
+```
+cd frontend && npm install && npm run dev
+```
+
+Frontend at `http://localhost:5173`, backend at `http://localhost:8080`.
+
+---
+
+Tests: `go test ./...` in `backend/`, `npm test` in `frontend/`.
+Coverage: `go test ./... -coverprofile=coverage.out && go tool cover -func=coverage.out`
+in `backend/`, `npm run coverage` in `frontend/`. Committed summaries are at
+`backend/coverage.txt` and `frontend/coverage-summary.txt`.
 
 ## API Examples
 

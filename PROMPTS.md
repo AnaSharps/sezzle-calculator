@@ -335,3 +335,9 @@ alright, we are just left with docker implementation now for both frontend and b
 ```
 you dont need to use claude browser extension, i can do it manually
 ```
+
+### Message 31
+
+```
+so, now with docker setup already done, we dont need manual setup instructions right? You can include them in the readme as an option, however the sequence for setups instructions should be divided into 3 alternative sections: Direct docker compose up, - 2. individually running backend / frontend for docker, 3. manuallly running the applications locally. Also, dont include too much unnecessary information, because thats clouding the reader's mind and will cost readability
+```
