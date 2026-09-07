@@ -342,6 +342,18 @@ This grammar produces precedence and associativity that were verified with
   storage) that nothing in the spec calls for. See Possible Extensions
   for what could be added if the scope changed.
 
+### Non-test code size
+
+Combined backend and frontend non-test code is around 1070 lines,
+against the brief's target of roughly 700. The two largest contributors
+are `backend/parser/parser.go` (the recursive descent parser itself,
+where correctness matters more than brevity) and the frontend's
+`styles.css` plus its component/type breakdown (`Display.tsx`,
+`Keypad.tsx`, `Calculator.tsx`, `tokens.ts`, `useCalculator.ts`) needed
+for the iOS-style UI. Nothing here is speculative abstraction; it is
+kept over budget deliberately rather than trimmed at the cost of
+readability or test coverage.
+
 ## Possible Extensions
 
 - Context dependent percent (`200 + 10%` meaning ten percent of 200).
