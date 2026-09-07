@@ -47,6 +47,36 @@ npm run dev
 Vite serves the calculator at `http://localhost:5173`. Open it in a browser;
 it talks to the backend at `http://localhost:8080` by default.
 
+### Running with Docker
+
+From the repository root, with Docker running:
+
+```
+docker compose up --build
+```
+
+This builds and starts both services: the backend on `http://localhost:8080`
+and the frontend on `http://localhost:5173`, wired to talk to each other
+with the same default ports as running them locally. Stop them with
+`docker compose down`.
+
+Each side also has its own `Dockerfile` if you want to build or run it in
+isolation, for example:
+
+```
+docker build -t sezzle-calculator-backend ./backend
+docker run -p 8080:8080 sezzle-calculator-backend
+
+docker build -t sezzle-calculator-frontend \
+  --build-arg VITE_API_URL=http://localhost:8080 ./frontend
+docker run -p 5173:80 sezzle-calculator-frontend
+```
+
+`VITE_API_URL` is a build argument, not a runtime environment variable,
+because Vite bakes it into the static JavaScript bundle at build time; the
+built frontend runs entirely in the browser, so the URL it points to has to
+be reachable from there, not from inside the Docker network.
+
 To run the test suites:
 
 ```

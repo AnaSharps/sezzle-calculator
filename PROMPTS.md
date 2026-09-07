@@ -315,3 +315,23 @@ now, another case is when i go: 2+3*8=, i get the result in my input field, howe
 ```
 also, I want to add an initial design decision doc which was done before starting any implementation. Here is the text: [Design Log document, 14 sections covering language choice, arithmetic ownership, evaluation model, API shape, evaluation trigger, grammar and precedence, sqrt binding, percent semantics, display/canonical representations, input method, numeric type, error handling boundary, deliberate omissions, and operational concerns, plus a closing method note. The full text was pasted verbatim and is committed as DESIGN_LOG.md rather than duplicated here], add this too to the repo.
 ```
+
+## Docker Implementation
+
+### Message 28
+
+```
+okay, you have added the ref to prompts.md in the readme file as well right?
+```
+
+### Message 29
+
+```
+alright, we are just left with docker implementation now for both frontend and backend. lets do it quick. docker is already running
+```
+
+### Message 30
+
+```
+you dont need to use claude browser extension, i can do it manually
+```
