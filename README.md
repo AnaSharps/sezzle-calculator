@@ -2,11 +2,53 @@
 
 ## Setup Instructions
 
-(to be filled in)
+Prerequisites:
+
+- Go 1.27 or later.
+- Node.js 20 or later (tested with Node 26) and npm.
+
+Clone the repository, then install each side:
+
+```
+cd backend
+go mod download   # no third-party dependencies, but this is harmless
+
+cd ../frontend
+npm install
+```
+
+Both sides run with no further configuration: the backend defaults to
+`PORT=8080` and `ALLOWED_ORIGIN=http://localhost:5173`, and the frontend
+defaults to `VITE_API_URL=http://localhost:8080`. Copy `backend/.env.example`
+to `backend/.env` and `frontend/.env.example` to `frontend/.env` only if you
+need to override those defaults.
 
 ## Running Frontend and Backend
 
-(to be filled in)
+Start the backend first, from `backend/`:
+
+```
+go run .
+```
+
+This logs `listening on :8080 (allowed origin: http://localhost:5173)` and
+serves `POST /api/calculate` and `GET /health`.
+
+In a second terminal, start the frontend, from `frontend/`:
+
+```
+npm run dev
+```
+
+Vite serves the calculator at `http://localhost:5173`. Open it in a browser;
+it talks to the backend at `http://localhost:8080` by default.
+
+To run the test suites:
+
+```
+cd backend && go test ./...
+cd frontend && npm test
+```
 
 ## API Examples
 
@@ -142,6 +184,43 @@ This grammar produces precedence and associativity that were verified with
   the second operand with once the `%` is consumed, and the parser reports
   it as a parse error (unexpected token) rather than silently accepting it.
 
+### What the frontend owns, and what it deliberately does not
+
+- The frontend owns input handling (mapping button presses and keystrokes
+  to tokens), display formatting (human readable text, the exponent
+  superscript), and error rendering (validation vs. network failure). It
+  is not "purely visual": it holds real state (the token sequence, the
+  in-flight request, the last result or error).
+- The frontend owns no arithmetic and no precedence resolution. It never
+  computes `+`, `-`, `*`, `/`, `^`, `sqrt`, or `%`, and it never decides
+  which operator binds tighter. It only assembles a canonical string from
+  button presses and hands the whole string to `POST /api/calculate`.
+- This mirrors the backend split: exactly one place owns evaluation logic
+  (`backend/parser`), and exactly one place owns presentation and input
+  state (`frontend/src/calculator`).
+
+### Display string vs. canonical string
+
+- Every button press appends one token to a `tokens: string[]` array,
+  held in `useCalculator` (`frontend/src/calculator/useCalculator.ts`).
+  Each token is already in canonical form: a digit, `.`, `+`, `-`, `*`,
+  `/`, `^`, `%`, `(`, `)`, or the word `sqrt` for the square root button.
+- `toCanonicalExpression` (`frontend/src/calculator/tokens.ts`) joins the
+  tokens with no separators to build the exact string sent to
+  `POST /api/calculate`. This is never generated from the display text.
+- `buildDisplaySegments` (same file) walks the same token array to build
+  what the user sees: it maps `*`, `/`, `sqrt`, and `-` through a single
+  lookup table to `×`, `÷`, `√`, and `−`, and marks digits following a
+  `^` token as superscript so `2`, `^`, `3` renders as `2³` while the
+  canonical string stays `2^3`.
+- Two representations exist because the display needs to look like a
+  calculator (operator glyphs, a raised exponent) while the backend
+  grammar needs an unambiguous plain-text string. Deriving both from the
+  same token array, rather than parsing the display text back into a
+  request, means there is exactly one source of truth for what the user
+  has typed, and the display can never drift out of sync with what gets
+  sent.
+
 ### Why the parser is a separate package from the HTTP layer
 
 - `backend/parser` imports nothing from `net/http` and knows nothing about
@@ -211,12 +290,12 @@ This grammar produces precedence and associativity that were verified with
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `PORT` | `8080` | Port the HTTP server listens on. |
-| `ALLOWED_ORIGIN` | `http://localhost:5173` | Origin permitted by CORS, the Vite dev server. |
+| `PORT` (backend) | `8080` | Port the HTTP server listens on. |
+| `ALLOWED_ORIGIN` (backend) | `http://localhost:5173` | Origin permitted by CORS, the Vite dev server. |
+| `VITE_API_URL` (frontend) | `http://localhost:8080` | Base URL the frontend sends `POST /api/calculate` and reads for `GET /health` against. |
 
-- Documented in `backend/.env.example`. `.env` itself is gitignored.
-- The frontend's `VITE_API_URL` variable is added to this table once the
-  frontend stage introduces it.
+- Documented in `backend/.env.example` and `frontend/.env.example`. Both
+  `.env` files are gitignored.
 
 ### What was deliberately left out
 

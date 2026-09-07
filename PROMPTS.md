@@ -207,3 +207,45 @@ continue
 ```
 the text you are adding in ReadMe should not be so paragraph heavy, instead structure them in bullet points so its intuitively understandable
 ```
+
+## Post-Stage-2 Housekeeping
+
+### Message 12
+
+```
+commit the changes to github first. https://github.com/AnaSharps/sezzle-calculator.git is the repo. Make sure to include details added in the commit
+```
+
+### Message 13
+
+```
+alright, since stage 1 & 2 both are complete, can you lay down the steps how can i test them properly myself? using postman / curl. dont want to rely solely on your results, can be biased since you might be overlooking a few areas / edge cases
+```
+
+## Docker (requested, deferred to the end)
+
+### Message 14
+
+```
+have you setup docker yet?
+```
+
+### Message 15
+
+```
+i eventually want to add docker for both frotnend and backend, yes i want you to add it now
+```
+
+## Stage 3: Frontend
+
+### Message 16
+
+```
+alright, i have tested all the cases manually, the backend looks good. We can add docker at the very end if time permits. You can start with stage 3, before that do you have any uncommitted changes?
+```
+
+### Message 17
+
+```
+retry now
+```
