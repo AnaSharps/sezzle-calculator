@@ -1,5 +1,9 @@
 # Sezzle Calculator
 
+See [DESIGN_LOG.md](DESIGN_LOG.md) for the design decisions settled
+before any code was written, and [PROMPTS.md](PROMPTS.md) for the
+verbatim message log of how the implementation proceeded from there.
+
 ## Setup Instructions
 
 Prerequisites:

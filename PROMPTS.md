@@ -309,3 +309,9 @@ so whats currently happening is when i type 2, then xy, nothing shows up on the 
 ```
 now, another case is when i go: 2+3*8=, i get the result in my input field, however, then when i type any operation (which should be allowed, the input removes the prev result, and only takes the operation as the input, basically result should be preserved for immediate followup operations. this is a basic requirement of any calculator app
 ```
+
+### Message 27
+
+```
+also, I want to add an initial design decision doc which was done before starting any implementation. Here is the text: [Design Log document, 14 sections covering language choice, arithmetic ownership, evaluation model, API shape, evaluation trigger, grammar and precedence, sqrt binding, percent semantics, display/canonical representations, input method, numeric type, error handling boundary, deliberate omissions, and operational concerns, plus a closing method note. The full text was pasted verbatim and is committed as DESIGN_LOG.md rather than duplicated here], add this too to the repo.
+```
