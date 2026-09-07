@@ -5,10 +5,14 @@ interface DisplayProps {
   tokens: string[];
   result: number | null;
   error: CalculatorError | null;
-  isLoading: boolean;
 }
 
-export function Display({ tokens, result, error, isLoading }: DisplayProps) {
+// Deliberately ignores loading state: while a calculation is in flight the
+// expression stays exactly as typed, with nothing appended to it, so
+// pressing equals never shows a transient extra character before the
+// result replaces it. The keypad being disabled during the request (see
+// Calculator.tsx) is the only loading affordance.
+export function Display({ tokens, result, error }: DisplayProps) {
   const segments = result === null ? buildDisplaySegments(tokens) : null;
   const showPlaceholder = segments !== null && segments.length === 0;
 
@@ -26,14 +30,9 @@ export function Display({ tokens, result, error, isLoading }: DisplayProps) {
             <span key={index}>{segment.text}</span>
           ),
         )}
-        {isLoading && (
-          <span className="display__loading" aria-label="Calculating">
-            …
-          </span>
-        )}
       </div>
       <div className="display__error" data-testid="display-error">
-        {error?.message ?? ' '}
+        {error?.message ?? ' '}
       </div>
     </div>
   );

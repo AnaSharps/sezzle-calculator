@@ -265,3 +265,29 @@ first of all your coverage spelling is wrong, secondly give me a detailed descri
 ```
 alright. These look understandable, lets first generate the unit tests and coverage reports and then see if we can reduce these non-code lines. Lets commit these changes first and proceed
 ```
+
+## Post-Stage-4 Manual Exploration and Bug Fix
+
+### Message 20
+
+```
+push the changes to git first
+```
+
+### Message 21
+
+```
+alright, run both backend and frontend now. I want to explore the application myself first
+```
+
+### Message 22
+
+```
+when i press = after any expression, it first appends itself into the text box, then the text changes to resulting value, this hinders the user experience and feels like there's something going off, can you fix this?
+```
+
+### Message 23
+
+```
+yes
+```

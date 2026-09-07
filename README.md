@@ -59,7 +59,7 @@ cd frontend && npm run coverage
 
 Committed summaries live at `backend/coverage.txt` (81.3% statements,
 100% on the parser's core `Evaluate` path) and
-`frontend/coverage-summary.txt` (100% statements/lines/functions, 98.66%
+`frontend/coverage-summary.txt` (100% statements/lines/functions, 98.63%
 branches). Both files explain the specific lines that remain uncovered
 and why. The raw profile (`backend/coverage.out`) and the full HTML/JSON
 report (`frontend/coverage/`) are regenerated locally and gitignored.

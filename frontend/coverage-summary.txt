@@ -12,21 +12,21 @@ Generated with: npm run coverage (vitest run --coverage)
 
  Test Files  2 passed (2)
       Tests  19 passed (19)
-   Start at  18:33:05
-   Duration  1.23s (tests 61%, environment 28%, setup 5%, transform 3%, worker 2%, import 1%)
+   Start at  18:45:23
+   Duration  1.23s (tests 60%, environment 28%, setup 5%, transform 3%, worker 2%, import 1%)
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
 File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 -------------------|---------|----------|---------|---------|-------------------
-All files          |     100 |    98.66 |     100 |     100 |                   
- src/calculator    |     100 |    98.43 |     100 |     100 |                   
+All files          |     100 |    98.63 |     100 |     100 |                   
+ src/calculator    |     100 |    98.38 |     100 |     100 |                   
   Keypad.tsx       |     100 |       90 |     100 |     100 | 70                
 -------------------|---------|----------|---------|---------|-------------------
 
 =============================== Coverage summary ===============================
 Statements   : 100% ( 121/121 )
-Branches     : 98.66% ( 74/75 )
+Branches     : 98.63% ( 72/73 )
 Functions    : 100% ( 26/26 )
 Lines        : 100% ( 118/118 )
 ================================================================================

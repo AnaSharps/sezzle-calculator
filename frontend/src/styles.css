@@ -59,12 +59,6 @@ body {
   vertical-align: super;
 }
 
-.display__loading {
-  display: inline-block;
-  margin-left: 4px;
-  color: #8e8e93;
-}
-
 .display__error {
   min-height: 18px;
   font-size: 13px;

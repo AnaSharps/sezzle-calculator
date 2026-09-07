@@ -58,7 +58,7 @@ export function Calculator() {
 
   return (
     <div className="calculator">
-      <Display tokens={tokens} result={result} error={error} isLoading={isLoading} />
+      <Display tokens={tokens} result={result} error={error} />
       <Keypad disabled={isLoading} onToken={pressToken} onClear={clear} onDelete={deleteLast} onEquals={() => void equals()} />
     </div>
   );
