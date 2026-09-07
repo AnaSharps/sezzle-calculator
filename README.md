@@ -50,6 +50,20 @@ cd backend && go test ./...
 cd frontend && npm test
 ```
 
+To regenerate the coverage reports:
+
+```
+cd backend && go test ./... -coverprofile=coverage.out && go tool cover -func=coverage.out
+cd frontend && npm run coverage
+```
+
+Committed summaries live at `backend/coverage.txt` (81.3% statements,
+100% on the parser's core `Evaluate` path) and
+`frontend/coverage-summary.txt` (100% statements/lines/functions, 98.66%
+branches). Both files explain the specific lines that remain uncovered
+and why. The raw profile (`backend/coverage.out`) and the full HTML/JSON
+report (`frontend/coverage/`) are regenerated locally and gitignored.
+
 ## API Examples
 
 The commands and responses below are real output, captured by running the

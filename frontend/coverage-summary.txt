@@ -1,0 +1,42 @@
+Vitest coverage summary
+Generated with: npm run coverage (vitest run --coverage)
+
+
+> frontend@0.0.0 coverage
+> vitest run --coverage
+
+
+ RUN  v5.0.0 /Users/prashansa/sezzle-calculator/frontend
+      Coverage enabled with v8
+
+
+ Test Files  2 passed (2)
+      Tests  19 passed (19)
+   Start at  18:33:05
+   Duration  1.23s (tests 61%, environment 28%, setup 5%, transform 3%, worker 2%, import 1%)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |    98.66 |     100 |     100 |                   
+ src/calculator    |     100 |    98.43 |     100 |     100 |                   
+  Keypad.tsx       |     100 |       90 |     100 |     100 | 70                
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 121/121 )
+Branches     : 98.66% ( 74/75 )
+Functions    : 100% ( 26/26 )
+Lines        : 100% ( 118/118 )
+================================================================================
+
+Notes:
+- Statements, lines, and functions are all at 100%.
+- The one remaining uncovered branch is Keypad.tsx:70, the
+  "key.token !== undefined" check in handlePress's if/else-if chain.
+  Every entry in the KEYS array always has either an action or a token,
+  so the implicit "neither" fallthrough this guards against cannot
+  currently occur; it is a defensive branch analogous to the backend's
+  panic-recovery safety net, not a gap in test coverage of real
+  behavior.

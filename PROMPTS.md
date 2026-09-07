@@ -249,3 +249,19 @@ alright, i have tested all the cases manually, the backend looks good. We can ad
 ```
 retry now
 ```
+
+## Post-Stage-3 Review
+
+### Message 18
+
+```
+first of all your coverage spelling is wrong, secondly give me a detailed description of the lines that are flagged as non-test codee
+```
+
+## Stage 4: Coverage Reports
+
+### Message 19
+
+```
+alright. These look understandable, lets first generate the unit tests and coverage reports and then see if we can reduce these non-code lines. Lets commit these changes first and proceed
+```

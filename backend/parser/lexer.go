@@ -29,9 +29,6 @@ type token struct {
 }
 
 func (t token) describe() string {
-	if t.kind == tokEOF {
-		return "end of expression"
-	}
 	return fmt.Sprintf("%q", t.text)
 }
 

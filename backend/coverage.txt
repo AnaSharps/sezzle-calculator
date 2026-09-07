@@ -1,0 +1,47 @@
+Go test coverage summary
+Generated with: go test ./... -coverprofile=coverage.out && go tool cover -func=coverage.out
+
+ok  	sezzle-calculator/backend	1.032s
+ok  	sezzle-calculator/backend/parser	0.545s
+
+sezzle-calculator/backend/handlers.go:31:	calculateHandler	92.0%
+sezzle-calculator/backend/handlers.go:67:	healthHandler		100.0%
+sezzle-calculator/backend/handlers.go:71:	writeJSON		100.0%
+sezzle-calculator/backend/handlers.go:77:	writeError		100.0%
+sezzle-calculator/backend/main.go:13:		main			0.0%
+sezzle-calculator/backend/main.go:44:		getEnv			0.0%
+sezzle-calculator/backend/middleware.go:11:	loggingMiddleware	100.0%
+sezzle-calculator/backend/middleware.go:25:	WriteHeader		100.0%
+sezzle-calculator/backend/middleware.go:33:	corsMiddleware		100.0%
+sezzle-calculator/backend/parser/lexer.go:31:	describe		100.0%
+sezzle-calculator/backend/parser/lexer.go:35:	lex			97.6%
+sezzle-calculator/backend/parser/lexer.go:101:	isLetter		100.0%
+sezzle-calculator/backend/parser/parser.go:24:	Evaluate		100.0%
+sezzle-calculator/backend/parser/parser.go:62:	current			100.0%
+sezzle-calculator/backend/parser/parser.go:66:	advance			100.0%
+sezzle-calculator/backend/parser/parser.go:72:	parseExpression		93.8%
+sezzle-calculator/backend/parser/parser.go:100:	parseTerm		88.9%
+sezzle-calculator/backend/parser/parser.go:131:	parseFactor		85.7%
+sezzle-calculator/backend/parser/parser.go:155:	parsePower		92.3%
+sezzle-calculator/backend/parser/parser.go:175:	parsePostfix		100.0%
+sezzle-calculator/backend/parser/parser.go:188:	parsePrimary		85.7%
+sezzle-calculator/backend/router.go:8:		newRouter		100.0%
+total:						(statements)		81.3%
+
+Notes:
+- main() and getEnv() are 0%: they start a real server and read the
+  process environment, which is exercised by running the binary, not by
+  unit tests. Their logic (env var defaults, server wiring) is otherwise
+  a few lines with no branching worth testing in isolation.
+- calculateHandler is 92%: the uncovered lines are the deferred
+  recover() block, a safety net for a parser panic that the parser is
+  designed never to produce (see backend/parser tests), so it is never
+  exercised in normal operation.
+- The parser functions below 100% (parseExpression, parseTerm,
+  parseFactor, parsePower, parsePrimary) are all in the 85-94% range for
+  the same reason: each has an "if err != nil" guard after every
+  recursive call for a second/right-hand operand, and not every one of
+  those guards is independently forced by a distinct test case. The
+  error paths themselves are covered by other, more direct test cases
+  (e.g. "5/0" for division by zero) rather than through every possible
+  position in a longer expression.
